@@ -1,0 +1,15 @@
+{
+  "string": "woohoo",
+  "boolean": true,
+  "integer": 10,
+  "float": 3.5,
+
+  "array": ["woohoo", true, 10, 3.5],
+
+  "object": {
+    "string": "woohoo",
+    "boolean": true,
+    "integer": 10,
+    "float": 3.5
+  }
+}
