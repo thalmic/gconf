@@ -1,9 +1,11 @@
 package test
 
 import (
+	"fmt"
+	"testing"
+
 	. "github.com/smartystreets/goconvey/convey"
 	"github.com/thalmic/gconf/lib"
-	"testing"
 )
 
 func TestParseEnvironment(t *testing.T) {
@@ -78,5 +80,13 @@ func TestParseEnvironment(t *testing.T) {
 			So(result, ShouldBeEmpty)
 			So(err, ShouldBeNil)
 		})
+	})
+
+	Convey("Allows an equal sign in the value", t, func() {
+		value := "a+b=c"
+		loader := lib.NewEnvironmentLoader(false, "", "")
+		result, err := loader.ParseEnvironment([]string{fmt.Sprintf("test=%v", value)})
+		So(result["test"], ShouldEqual, value)
+		So(err, ShouldBeNil)
 	})
 }

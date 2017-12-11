@@ -29,7 +29,7 @@ func (loader *EnvironmentLoader) ParseEnvironment(environmentData []string) (map
 	for _, environmentLine := range environmentData {
 
 		// Split the env entry on =
-		keyValue := strings.Split(environmentLine, "=")
+		keyValue := strings.SplitN(environmentLine, "=", 2)
 
 		// If there was no equals, ignore this line
 		if keyValue == nil || len(keyValue) < 2 {
