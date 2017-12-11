@@ -82,7 +82,7 @@ func TestParseEnvironment(t *testing.T) {
 		})
 	})
 
-	Convey("Allows equal sign in value", t, func() {
+	Convey("Allows an equal sign in the value", t, func() {
 		value := "a+b=c"
 		loader := lib.NewEnvironmentLoader(false, "", "")
 		result, err := loader.ParseEnvironment([]string{fmt.Sprintf("test=%v", value)})
