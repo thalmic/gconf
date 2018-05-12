@@ -86,7 +86,7 @@ The map loader (`gconf.Map`) only has 1 parameter:
 This loader should be used for defaulting values not found in any other loaders.
 
 ### Extensions
-Adding a new loader is very simple, simply create a structure that extends the following interface:
+Adding a new loader is very simple, simply create a structure that implements the following interface:
 ```go
 type Loader interface {
 	Load() (map[string]interface{}, error)
