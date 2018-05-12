@@ -1,9 +1,10 @@
 package test
 
 import (
+	"testing"
+
 	. "github.com/smartystreets/goconvey/convey"
 	"github.com/thalmic/gconf/lib"
-	"testing"
 )
 
 func TestUse(t *testing.T) {
@@ -23,7 +24,7 @@ func TestUse(t *testing.T) {
 
 	Convey("Panics if the config failed to load", t, func() {
 		config := lib.NewConfig()
-		So(func() { config.Use(lib.NewJSONFileLoader("")) }, ShouldPanic)
+		So(func() { config.Use(lib.NewJSONFileLoader("", false)) }, ShouldPanic)
 	})
 }
 

@@ -1,9 +1,11 @@
 package test
 
 import (
+	"testing"
+	"time"
+
 	. "github.com/smartystreets/goconvey/convey"
 	"github.com/thalmic/gconf/lib"
-	"testing"
 )
 
 func TestHas(t *testing.T) {
@@ -151,9 +153,27 @@ func TestParseString(t *testing.T) {
 		So(result, ShouldResemble, map[string]interface{}{"a": float64(1), "b": float64(2)})
 	})
 
+	Convey("Parses durations", t, func() {
+		result := lib.ParseString("3s")
+		So(result, ShouldEqual, 3*time.Second)
+	})
+
 	Convey("Leaves every other format untouched", t, func() {
 		result := lib.ParseString("Hello")
 		So(result, ShouldEqual, "Hello")
+	})
+}
+
+func TestParseDuration(t *testing.T) {
+
+	Convey("Returns a duration when the string matches duration format", t, func() {
+		result := lib.ParseDurationString("3s")
+		So(result, ShouldEqual, 3*time.Second)
+	})
+
+	Convey("Returns the original string when the string doesn't match duration format", t, func() {
+		result := lib.ParseDurationString("definitely not 3s")
+		So(result, ShouldEqual, "definitely not 3s")
 	})
 }
 

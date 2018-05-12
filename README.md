@@ -76,8 +76,9 @@ PREFIXTEST=1 go run main.go // Same as above as long as prefix is set to "PREFIX
 ```
 
 ### JSONFile
-The JSON file loader (`gconf.JSONFile`) only has 1 parameter:
+The JSON file loader (`gconf.JSONFile`) has 2 parameters:
 * filePath: The file path of the JSON file to use.
+* parseDurations: A flag indicating whether strings matching the [time.ParseDuration](https://golang.org/pkg/time/#ParseDuration) format should be parsed to a `time.Duration` representation.
 
 ### Map
 The map loader (`gconf.Map`) only has 1 parameter:
@@ -145,7 +146,7 @@ val, err := config.GetInteger("object:value")                       // Simple an
 gconf will parse environment and command line parameters into various primitive types. For example, if you are using both
 command line and environment loaders and run your program as follows:
 ```
-ENV_INT=1 ENV_FLOAT=3.3 ENV_BOOL=true go run main.go -argInt=1 -argFloat=3.3 -argBool=true
+ENV_INT=1 ENV_FLOAT=3.3 ENV_BOOL=true ENV_DURATION=3s go run main.go -argInt=1 -argFloat=3.3 -argBool=true -argDuration=3s
 ```
 
 gconf will parse the configuration into a map as follows:
@@ -154,9 +155,11 @@ map[string]interface{}{
 	"ENV_INT": int(1),
 	"ENV_FLOAT": float64(3.3),
 	"ENV_BOOL": bool(true),
+	"ENV_DURATION": 3 * time.Second
 	"argInt": 1,
 	"argFloat": float64(3.3),
 	"argBool": bool(true),
+	"argDuration": 3 * time.Second
 }
 ```
 
