@@ -5,12 +5,14 @@ import (
 	"strings"
 )
 
+// EnvironmentLoader defines a loader that loads configurations from environment variables
 type EnvironmentLoader struct {
 	LowerCase bool
 	Prefix    string
 	Separator string
 }
 
+// NewEnvironmentLoader creates a new environment loader
 func NewEnvironmentLoader(lowerCase bool, separator string, prefix string) *EnvironmentLoader {
 	return &EnvironmentLoader{
 		LowerCase: lowerCase,
@@ -19,10 +21,12 @@ func NewEnvironmentLoader(lowerCase bool, separator string, prefix string) *Envi
 	}
 }
 
+// Load loads environment variables
 func (loader *EnvironmentLoader) Load() (map[string]interface{}, error) {
 	return loader.ParseEnvironment(os.Environ())
 }
 
+// Parse environment parses environment variables into a configuration map
 func (loader *EnvironmentLoader) ParseEnvironment(environmentData []string) (map[string]interface{}, error) {
 	config := map[string]interface{}{}
 

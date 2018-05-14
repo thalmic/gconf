@@ -6,13 +6,16 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+	"time"
 )
 
+// Has checks if the supplied map contains the supplied key
 func Has(m map[string]interface{}, key string) bool {
 	_, keyExists := m[key]
 	return keyExists
 }
 
+// Set sets the value of a nested key in the supplied map
 func Set(m map[string]interface{}, keys []string, value interface{}) (map[string]interface{}, error) {
 
 	// If we're not adding interface{} more keys, return this map
@@ -58,6 +61,7 @@ func Set(m map[string]interface{}, keys []string, value interface{}) (map[string
 	return m, nil
 }
 
+// Get gets the value of a nested key in the supplied map
 func Get(m map[string]interface{}, keys []string) (interface{}, error) {
 
 	key := keys[0]
@@ -81,6 +85,7 @@ func Get(m map[string]interface{}, keys []string) (interface{}, error) {
 	return Get(mapValue, keys[1:])
 }
 
+// Merge merges two maps recursively
 func Merge(map1 map[string]interface{}, map2 map[string]interface{}) map[string]interface{} {
 
 	for key, value := range map2 {
@@ -107,6 +112,7 @@ func Merge(map1 map[string]interface{}, map2 map[string]interface{}) map[string]
 	return map1
 }
 
+// ParseString parses a string into a variety of types
 func ParseString(value string) interface{} {
 
 	// Check if it's a bool
@@ -144,14 +150,25 @@ func ParseString(value string) interface{} {
 		return jsonArray
 	}
 
-	// None of the above, leave it as is
+	// Finally, try it as a duration
+	return ParseDurationString(value)
+}
+
+// ParseDurationString attempts to parse a string into a duration, returning the original value if parsing failed
+func ParseDurationString(value string) interface{} {
+	durationValue, err := time.ParseDuration(value)
+	if err == nil {
+		return durationValue
+	}
 	return value
 }
 
+// SplitKey splits the supplied key into an array
 func SplitKey(key string) []string {
 	return strings.Split(key, ":")
 }
 
+// CastMap casts a value to a map
 func CastMap(obj interface{}) (map[string]interface{}, error) {
 	value, cast := obj.(map[string]interface{})
 	if !cast {
@@ -160,6 +177,7 @@ func CastMap(obj interface{}) (map[string]interface{}, error) {
 	return value, nil
 }
 
+// CastSlice casts a value to a slice
 func CastSlice(obj interface{}) ([]interface{}, error) {
 	value, cast := obj.([]interface{})
 	if !cast {
@@ -168,6 +186,7 @@ func CastSlice(obj interface{}) ([]interface{}, error) {
 	return value, nil
 }
 
+// CastStringSlice casts a value to a string slice
 func CastStringSlice(obj interface{}) ([]string, error) {
 	value, cast := obj.([]string)
 	if !cast {
@@ -176,6 +195,7 @@ func CastStringSlice(obj interface{}) ([]string, error) {
 	return value, nil
 }
 
+// CastString casts a value to a string
 func CastString(obj interface{}) (string, error) {
 	value, cast := obj.(string)
 	if !cast {
@@ -184,6 +204,7 @@ func CastString(obj interface{}) (string, error) {
 	return value, nil
 }
 
+// CastIntegerSlice casts a value to an integer slice
 func CastIntegerSlice(obj interface{}) ([]int, error) {
 	value, cast := obj.([]int)
 	if !cast {
@@ -209,6 +230,7 @@ func CastIntegerSlice(obj interface{}) ([]int, error) {
 	return value, nil
 }
 
+// CastInteger casts a value to an integer
 func CastInteger(obj interface{}) (int, error) {
 	value, cast := obj.(int) // Try a regular integer cast
 	if !cast {
@@ -228,6 +250,7 @@ func CastInteger(obj interface{}) (int, error) {
 	return value, nil
 }
 
+// CastBooleanSlice casts a value to a boolean slice
 func CastBooleanSlice(obj interface{}) ([]bool, error) {
 	value, cast := obj.([]bool)
 	if !cast {
@@ -236,6 +259,7 @@ func CastBooleanSlice(obj interface{}) ([]bool, error) {
 	return value, nil
 }
 
+// CastBoolean casts a value to a boolean
 func CastBoolean(obj interface{}) (bool, error) {
 	value, cast := obj.(bool)
 	if !cast {
@@ -244,6 +268,7 @@ func CastBoolean(obj interface{}) (bool, error) {
 	return value, nil
 }
 
+// CastFloatSlice casts a value to a float slice
 func CastFloatSlice(obj interface{}) ([]float64, error) {
 	value, cast := obj.([]float64)
 	if !cast {
@@ -252,6 +277,7 @@ func CastFloatSlice(obj interface{}) ([]float64, error) {
 	return value, nil
 }
 
+// CastFloat casts a value to a float
 func CastFloat(obj interface{}) (float64, error) {
 	value, cast := obj.(float64)
 	if !cast {

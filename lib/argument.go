@@ -5,12 +5,14 @@ import (
 	"strings"
 )
 
+// ArgumentLoader defines a loader that loads configuration from command line arguments
 type ArgumentLoader struct {
 	LowerCase bool
 	Prefix    string
 	Separator string
 }
 
+// NewArgumentLoader creates a new argument loader
 func NewArgumentLoader(separator string, prefix string) *ArgumentLoader {
 	return &ArgumentLoader{
 		Prefix:    prefix,
@@ -18,10 +20,12 @@ func NewArgumentLoader(separator string, prefix string) *ArgumentLoader {
 	}
 }
 
+// Load loads environment variables into a configuration map
 func (loader *ArgumentLoader) Load() (map[string]interface{}, error) {
 	return loader.ParseArguments(os.Args[1:])
 }
 
+// ParseArguments parses command line arguments into valid types
 func (loader *ArgumentLoader) ParseArguments(args []string) (map[string]interface{}, error) {
 	config := map[string]interface{}{}
 

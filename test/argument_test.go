@@ -1,9 +1,10 @@
 package test
 
 import (
+	"testing"
+
 	. "github.com/smartystreets/goconvey/convey"
 	"github.com/thalmic/gconf/lib"
-	"testing"
 )
 
 func TestParseArguments(t *testing.T) {

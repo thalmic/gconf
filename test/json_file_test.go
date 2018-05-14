@@ -1,21 +1,23 @@
 package test
 
 import (
+	"testing"
+	"time"
+
 	. "github.com/smartystreets/goconvey/convey"
 	"github.com/thalmic/gconf/lib"
-	"testing"
 )
 
 func TestJSONFileLoad(t *testing.T) {
 
 	Convey("Returns an error when the file can't be found", t, func() {
-		result, err := lib.NewJSONFileLoader("").Load()
+		result, err := lib.NewJSONFileLoader("", false).Load()
 		So(result, ShouldBeEmpty)
 		So(err, ShouldNotBeNil)
 	})
 
 	Convey("Loads a JSON file", t, func() {
-		result, err := lib.NewJSONFileLoader("test.json").Load()
+		result, err := lib.NewJSONFileLoader("test.json", false).Load()
 		So(err, ShouldBeNil)
 		So(result, ShouldResemble, map[string]interface{}{
 			"string":  "woohoo",
@@ -34,7 +36,7 @@ func TestJSONFileLoad(t *testing.T) {
 }
 
 func TestParseJSON(t *testing.T) {
-	loader := lib.NewJSONFileLoader("")
+	loader := lib.NewJSONFileLoader("", false)
 
 	Convey("Returns an error when parsing invalid JSON", t, func() {
 		result, err := loader.ParseJSON([]byte(""))
@@ -55,5 +57,32 @@ func TestParseJSON(t *testing.T) {
 			So(result, ShouldResemble, map[string]interface{}{"a": map[string]interface{}{"b": "c"}})
 			So(err, ShouldBeNil)
 		})
+
+		Convey("Returns the original map when duration parsing is disabled", func() {
+			result, err := loader.ParseJSON([]byte(`{"a": "3s"}`))
+			So(result, ShouldResemble, map[string]interface{}{"a": "3s"})
+			So(err, ShouldBeNil)
+		})
+
+		Convey("Returns a modified map when duration parsing is enabled", func() {
+			l := lib.NewJSONFileLoader("", true)
+			result, err := l.ParseJSON([]byte(`{"a": "3s"}`))
+			So(result, ShouldResemble, map[string]interface{}{"a": 3 * time.Second})
+			So(err, ShouldBeNil)
+		})
+	})
+}
+
+func TestParseDurationStrings(t *testing.T) {
+	loader := lib.NewJSONFileLoader("", true)
+
+	Convey("Parses string durations", t, func() {
+		m := loader.ParseDurationStrings(map[string]interface{}{"a": "3s"})
+		So(m, ShouldResemble, map[string]interface{}{"a": 3 * time.Second})
+	})
+
+	Convey("Recurses into submaps", t, func() {
+		m := loader.ParseDurationStrings(map[string]interface{}{"a": map[string]interface{}{"b": "3s"}})
+		So(m, ShouldResemble, map[string]interface{}{"a": map[string]interface{}{"b": 3 * time.Second}})
 	})
 }
