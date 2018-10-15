@@ -23,7 +23,7 @@ config := gconf.Instance()  // Or use a built in singleton
 // Load some configs. In case of collisions, the first loader wins
 config.Use(gconf.Arguments("separator", "prefix"))                      // From command line arguments
 config.Use(gconf.Environment(false, "separator", "prefix"))             // From environment variables
-config.Use(gconf.JSONFile("some_file.json"))                            // From a JSON file
+config.Use(gconf.JSONFile("some_file.json", false))                     // From a JSON file
 config.Use(gconf.Map(map[string]interface{}{ "SomeKey": "SomeValue" })) // From an arbitrary map
 
 // Convert to a structure or grab the final underlying map
