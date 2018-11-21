@@ -1,4 +1,7 @@
 # gconf
+
+[![GoDoc](https://godoc.org/github.com/thalmic/gconf?status.svg)](https://godoc.org/github.com/thalmic/gconf)
+
 A simple hierarchical configuration reader, heavily inspired by [nconf](https://github.com/indexzero/nconf).
 
 ## Installation
