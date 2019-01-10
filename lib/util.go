@@ -115,12 +115,6 @@ func Merge(map1 map[string]interface{}, map2 map[string]interface{}) map[string]
 // ParseString parses a string into a variety of types
 func ParseString(value string) interface{} {
 
-	// Check if it's a bool
-	boolValue, err := strconv.ParseBool(value)
-	if err == nil {
-		return boolValue
-	}
-
 	// Check if it's an int
 	intValue, err := strconv.ParseInt(value, 10, 0)
 	if err == nil {
@@ -131,6 +125,12 @@ func ParseString(value string) interface{} {
 	floatValue, err := strconv.ParseFloat(value, 64)
 	if err == nil {
 		return floatValue
+	}
+
+	// Check if it's a bool
+	boolValue, err := strconv.ParseBool(value)
+	if err == nil {
+		return boolValue
 	}
 
 	// Convert to bytes so we can do JSON checks
